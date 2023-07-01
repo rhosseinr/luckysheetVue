@@ -27,16 +27,17 @@
   },
   "devDependencies": {
     "@originjs/vite-plugin-commonjs": "^1.0.1",
+    "eslint": "7.32.0",
+    "eslint-plugin-vue": "8.7.1",
     "vite": "^4.3.9",
-    "vite-plugin-progress": "^0.0.7",
     "vite-plugin-env-compatible": "^1.1.1",
     "vite-plugin-lib-inject-css": "^1.1.0",
-    "eslint": "7.32.0",
-    "eslint-plugin-vue": "8.7.1"
+    "vite-plugin-progress": "^0.0.7",
+    "vite-plugin-vue2": "^2.0.3"
   },
   "peerDependencies": {
-    "vue": "2.7.14",
-    "vazirmatn": "^33.0.3"
+    "vazirmatn": "^33.0.3",
+    "vue": "2.7.14"
   },
   "repository": {
     "type": "git",

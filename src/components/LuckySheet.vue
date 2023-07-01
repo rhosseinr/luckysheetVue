@@ -1,32 +1,11 @@
 <template>
-  <div>
-    <div style="position: absolute; top: 0">
-      <input id="uploadBtn" type="file" @change="loadExcel" />
-
-      <span>Or Load remote xlsx file:</span>
-
-      <select v-model="selected" @change="selectExcel">
-        <option disabled value="">Choose</option>
-        <option
-          v-for="option in options"
-          :key="option.text"
-          :value="option.value"
-        >
-          {{ option.text }}
-        </option>
-      </select>
-
-      <a href="javascript:void(0)" @click="downloadExcel"
-        >Download source xlsx file</a
-      >
-    </div>
-    <div id="luckysheet"></div>
+  <div class="lucky-sheet-wrapper">
+    <div id="luckysheet" />
     <div v-show="isMaskShow" id="tip">Downloading</div>
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted } from "vue";
+<script>
 import { exportExcel } from "../utils/export";
 import { isFunction } from "../utils/is";
 import LuckyExcel from "luckyexcel";
@@ -34,167 +13,115 @@ import "../assets/pluginsCss.css";
 import "../assets/plugins.css";
 import "../assets/luckysheet.css";
 import "../assets/iconfont.css";
-import "../assets/style.css";
 
-const isMaskShow = ref(false);
-const selected = ref("");
-const jsonData = ref({});
-const options = ref([
-  {
-    text: "Money Manager.xlsx",
-    value: "https://minio.cnbabylon.com/public/luckysheet/money-manager-2.xlsx",
-  },
-  {
-    text: "Activity costs tracker.xlsx",
-    value:
-      "https://minio.cnbabylon.com/public/luckysheet/Activity%20costs%20tracker.xlsx",
-  },
-  {
-    text: "House cleaning checklist.xlsx",
-    value:
-      "https://minio.cnbabylon.com/public/luckysheet/House%20cleaning%20checklist.xlsx",
-  },
-  {
-    text: "Student assignment planner.xlsx",
-    value:
-      "https://minio.cnbabylon.com/public/luckysheet/Student%20assignment%20planner.xlsx",
-  },
-  {
-    text: "Credit card tracker.xlsx",
-    value:
-      "https://minio.cnbabylon.com/public/luckysheet/Credit%20card%20tracker.xlsx",
-  },
-  {
-    text: "Blue timesheet.xlsx",
-    value:
-      "https://minio.cnbabylon.com/public/luckysheet/Blue%20timesheet.xlsx",
-  },
-  {
-    text: "Student calendar (Mon).xlsx",
-    value:
-      "https://minio.cnbabylon.com/public/luckysheet/Student%20calendar%20%28Mon%29.xlsx",
-  },
-  {
-    text: "Blue mileage and expense report.xlsx",
-    value:
-      "https://minio.cnbabylon.com/public/luckysheet/Blue%20mileage%20and%20expense%20report.xlsx",
-  },
-]);
+export default {
+  name: "LuckySheet",
 
-const loadExcel = (evt) => {
-  const files = evt.target.files;
-  if (files == null || files.length == 0) {
-    alert("No files wait for import");
-    return;
-  }
+  props: {
+    url: { type: String, default: null },
+    file: { type: File, default: null },
+  },
 
-  let name = files[0].name;
-  let suffixArr = name.split("."),
-    suffix = suffixArr[suffixArr.length - 1];
-  if (suffix != "xlsx") {
-    alert("Currently only supports the import of xlsx files");
-    return;
-  }
-  LuckyExcel.transformExcelToLucky(
-    files[0],
-    function (exportJson, luckysheetfile) {
+  data() {
+    return {
+      isMaskShow: false,
+    };
+  },
+
+  created() {
+    this.loadLuckySheet();
+  },
+
+  watch: {
+    url() {
+      this.loadExcel(this.url, null);
+    },
+    file() {
+      this.loadExcel(null, this.file);
+    },
+  },
+
+  methods: {
+    loadLuckySheet() {
+      const pluginJs = document.createElement("script");
+      pluginJs.setAttribute("src", "js/plugin.js");
+      pluginJs.async = true;
+      document.head.appendChild(pluginJs);
+      pluginJs.onload = function () {
+        const luckysheetJs = document.createElement("script");
+        luckysheetJs.setAttribute("src", "js/luckysheet.umd.js");
+        luckysheetJs.async = true;
+        document.head.appendChild(luckysheetJs);
+        luckysheetJs.onload = function () {
+          luckysheet.create({
+            container: "luckysheet",
+          });
+        };
+      };
+    },
+
+    loadExcel(url, file) {
+      this.isMaskShow = true;
+
+      if (url) {
+        LuckyExcel.transformExcelToLuckyByUrl(
+          url,
+          "loaded Excel",
+          this.processExcel
+        );
+        this.isMaskShow = false;
+        return;
+      }
+
+      if (file == null) {
+        alert("No files wait for import");
+        this.isMaskShow = false;
+        return;
+      }
+
+      let name = file.name;
+      let suffixArr = name.split("."),
+        suffix = suffixArr[suffixArr.length - 1];
+      if (suffix != "xlsx") {
+        alert("Currently only supports the import of xlsx files");
+        this.isMaskShow = false;
+        return;
+      }
+      LuckyExcel.transformExcelToLucky(file, this.processExcel);
+      this.isMaskShow = false;
+    },
+
+    processExcel(exportJson, luckysheetfile) {
       if (exportJson.sheets == null || exportJson.sheets.length == 0) {
         alert(
           "Failed to read the content of the excel file, currently does not support xls files!"
         );
         return;
       }
-      console.log("exportJson", exportJson);
-      jsonData.value = exportJson;
-
       isFunction(window?.luckysheet?.destroy) && window.luckysheet.destroy();
 
       window.luckysheet.create({
         container: "luckysheet",
-        showinfobar: false,
+        showinfobar: true,
         data: exportJson.sheets,
         title: exportJson.info.name,
         userInfo: exportJson.info.name.creator,
       });
-    }
-  );
+    },
+
+    downloadExcel() {
+      exportExcel(luckysheet.getAllSheets(), "excel");
+    },
+  },
 };
-const selectExcel = (evt) => {
-  const value = selected.value;
-  const name = evt.target.options[evt.target.selectedIndex].innerText;
-
-  if (value == "") {
-    return;
-  }
-  isMaskShow.value = true;
-
-  LuckyExcel.transformExcelToLuckyByUrl(
-    value,
-    name,
-    (exportJson, luckysheetfile) => {
-      if (exportJson.sheets == null || exportJson.sheets.length == 0) {
-        alert(
-          "Failed to read the content of the excel file, currently does not support xls files!"
-        );
-        return;
-      }
-      console.log("exportJson", exportJson);
-      jsonData.value = exportJson;
-
-      isMaskShow.value = false;
-
-      isFunction(window?.luckysheet?.destroy) && window.luckysheet.destroy();
-
-      window.luckysheet.create({
-        container: "luckysheet",
-        showinfobar: false,
-        data: exportJson.sheets,
-        title: exportJson.info.name,
-        userInfo: exportJson.info.name.creator,
-      });
-    }
-  );
-};
-
-const downloadExcel = () => {
-  exportExcel(luckysheet.getAllSheets(), "excel");
-};
-
-onMounted(() => {
-  if (luckysheet)
-    luckysheet.create({
-      container: "luckysheet",
-    });
-});
 </script>
 
 <style scoped>
+.lucky-sheet-wrapper,
 #luckysheet {
   margin: 0px;
   padding: 0px;
-  position: absolute;
   width: 100%;
-  left: 0px;
-  top: 30px;
-  bottom: 0px;
-}
-
-#uploadBtn {
-  font-size: 16px;
-}
-
-#tip {
-  position: absolute;
-  z-index: 1000000;
-  left: 0px;
-  top: 0px;
-  bottom: 0px;
-  right: 0px;
-  background: rgba(255, 255, 255, 0.8);
-  text-align: center;
-  font-size: 40px;
-  align-items: center;
-  justify-content: center;
-  display: flex;
+  height: 100%;
 }
 </style>

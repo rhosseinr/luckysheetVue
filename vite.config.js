@@ -4,6 +4,7 @@ import { createVuePlugin } from "vite-plugin-vue2";
 import envCompatible from "vite-plugin-env-compatible";
 import { viteCommonjs } from "@originjs/vite-plugin-commonjs";
 import { libInjectCss } from "vite-plugin-lib-inject-css";
+import progress from "vite-plugin-progress";
 
 export default defineConfig({
   resolve: {
