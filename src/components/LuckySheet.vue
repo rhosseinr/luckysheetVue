@@ -20,6 +20,9 @@ export default {
   props: {
     url: { type: String, default: null },
     file: { type: File, default: null },
+    lang: { type: String, default: "en" },
+    backUrl: { type: String, default: "/" },
+    showInfoBar: { type: Boolean, default: false },
   },
 
   data() {
@@ -30,6 +33,14 @@ export default {
 
   created() {
     this.loadLuckySheet();
+  },
+
+  mounted() {
+    if (this.url) {
+      this.loadExcel(this.url, null);
+    } else if (this.file) {
+      this.loadExcel(null, this.file);
+    }
   },
 
   watch: {
@@ -43,20 +54,18 @@ export default {
 
   methods: {
     loadLuckySheet() {
+      const self = this;
       const pluginJs = document.createElement("script");
       pluginJs.setAttribute("src", "js/plugin.js");
-      pluginJs.async = true;
+      pluginJs.async = false;
       document.head.appendChild(pluginJs);
-      pluginJs.onload = function () {
-        const luckysheetJs = document.createElement("script");
-        luckysheetJs.setAttribute("src", "js/luckysheet.umd.js");
-        luckysheetJs.async = true;
-        document.head.appendChild(luckysheetJs);
-        luckysheetJs.onload = function () {
-          luckysheet.create({
-            container: "luckysheet",
-          });
-        };
+
+      const luckysheetJs = document.createElement("script");
+      luckysheetJs.setAttribute("src", "js/luckysheet.umd.js");
+      luckysheetJs.async = false;
+      document.head.appendChild(luckysheetJs);
+      luckysheetJs.onload = function () {
+        self.luckysheetCreate(true, {});
       };
     },
 
@@ -98,19 +107,38 @@ export default {
         );
         return;
       }
-      isFunction(window?.luckysheet?.destroy) && window.luckysheet.destroy();
 
-      window.luckysheet.create({
-        container: "luckysheet",
-        showinfobar: true,
-        data: exportJson.sheets,
-        title: exportJson.info.name,
-        userInfo: exportJson.info.name.creator,
-      });
+      this.luckysheetCreate(false, exportJson);
     },
 
     downloadExcel() {
       exportExcel(luckysheet.getAllSheets(), "excel");
+    },
+
+    luckysheetCreate(isNew, exportJson) {
+      const config = {
+        container: "luckysheet",
+        showinfobar: this.showInfoBar,
+        title: "untitled",
+        lang: this.lang,
+        myFolderUrl: this.backUrl,
+        updated: this.sheetUpdate,
+      };
+
+      if (isNew) {
+        luckysheet.create(config);
+      } else {
+        isFunction(window?.luckysheet?.destroy) && window.luckysheet.destroy();
+        config.title = exportJson.info.name;
+        config.data = exportJson.sheets;
+        config.userInfo = exportJson.info.name.creator;
+        window.luckysheet.create(config);
+      }
+    },
+
+    sheetUpdate(data) {
+      debugger;
+      console.log(data);
     },
   },
 };
@@ -123,5 +151,20 @@ export default {
   padding: 0px;
   width: 100%;
   height: 100%;
+}
+
+#tip {
+  position: absolute;
+  z-index: 1000000;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+  right: 0px;
+  background: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  font-size: 40px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
 }
 </style>
