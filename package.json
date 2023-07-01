@@ -1,0 +1,66 @@
+{
+  "name": "luckysheetvue",
+  "version": "1.0.0",
+  "author": "rhosseinr",
+  "license": "GNU",
+  "description": "vue 2 wrapper for luckySheet",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/lucky-sheet-vue.umd.js",
+  "module": "./dist/lucky-sheet-vue.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/lucky-sheet-vue.es.js",
+      "require": "./dist/lucky-sheet-vue.umd.js"
+    }
+  },
+  "scripts": {
+    "dev": "vite --open --host",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "exceljs": "^4.3.0",
+    "file-saver": "^2.0.5",
+    "luckyexcel": "^1.0.1"
+  },
+  "devDependencies": {
+    "@originjs/vite-plugin-commonjs": "^1.0.1",
+    "vite": "^4.3.9",
+    "vite-plugin-progress": "^0.0.7",
+    "vite-plugin-env-compatible": "^1.1.1",
+    "vite-plugin-lib-inject-css": "^1.1.0",
+    "eslint": "7.32.0",
+    "eslint-plugin-vue": "8.7.1"
+  },
+  "peerDependencies": {
+    "vue": "2.7.14",
+    "vazirmatn": "^33.0.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rhosseinr/luckysheetVue.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rhosseinr/luckysheetVue/issues"
+  },
+  "homepage": "https://github.com/rhosseinr/luckysheetVue#readme",
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
+  "keywords": [
+    "vue",
+    "vite",
+    "lucky-sheet",
+    "lucky-excel",
+    "excel",
+    "xlsx",
+    "vite",
+    "vue3",
+    "vue",
+    "table"
+  ]
+}
