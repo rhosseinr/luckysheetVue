@@ -137,8 +137,7 @@ export default {
     },
 
     sheetUpdate(data) {
-      debugger;
-      console.log(data);
+      this.$emit("update", data);
     },
   },
 };
