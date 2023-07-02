@@ -13,7 +13,6 @@ export default {
       isMaskShow: false,
       selectedUrl: null,
       selectedFile: null,
-      jsonData: {},
       options: [
         {
           text: "Money Manager.xlsx",
@@ -75,6 +74,18 @@ export default {
       }
       this.selectedFile = files[0];
     },
+
+    updateExcel(data) {
+      console.log("data", data);
+    },
+
+    resized(size) {
+      console.log("size", size);
+    },
+
+    downloadExcel() {
+      this.$refs.sheetRef.downloadExcel();
+    },
   },
 };
 </script>
@@ -82,21 +93,43 @@ export default {
 <template>
   <div class="d-flex h-100">
     <div class="demo-toolbar">
-      <input id="uploadBtn" type="file" @change="loadExcelFromFile" />
-      <span>Load Remote Xlsx:</span>
-      <select v-model="selectedUrl" @change="selectExcel">
-        <option disabled value="">Choose</option>
-        <option
-          v-for="option in options"
-          :key="option.text"
-          :value="option.value"
+      <div>
+        <input id="uploadBtn" type="file" @change="loadExcelFromFile" />
+      </div>
+      <div>
+        <span>Load Remote Xlsx:</span>
+        <select
+          v-model="selectedUrl"
+          class="select-excel"
+          @change="selectExcel"
         >
-          {{ option.text }}
-        </option>
-      </select>
-      <!-- <a href="javascript:void(0)" @click="downloadExcel"> Download xlsx </a> -->
+          <option disabled value="">Choose</option>
+          <option
+            v-for="option in options"
+            :key="option.text"
+            :value="option.value"
+          >
+            {{ option.text }}
+          </option>
+        </select>
+      </div>
+      <div>
+        <a
+          href="javascript:void(0)"
+          class="download-excel"
+          @click="downloadExcel"
+        >
+          Download xlsx
+        </a>
+      </div>
     </div>
-    <LuckySheet :url="selectedUrl" :file="selectedFile" />
+    <LuckySheet
+      ref="sheetRef"
+      :url="selectedUrl"
+      :file="selectedFile"
+      @updated="updateExcel"
+      @resized="resized"
+    />
   </div>
 </template>
 
@@ -119,6 +152,7 @@ body {
   margin: 0;
   height: 100%;
   width: 100%;
+  box-sizing: border-box;
 }
 
 #app {
@@ -137,7 +171,10 @@ body {
 
 .demo-toolbar {
   background: rgba(200, 200, 200, 0.5);
-  padding: 1em;
+  padding: 0.5em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .d-flex {
@@ -147,5 +184,20 @@ body {
 
 .h-100 {
   height: 100%;
+}
+
+.download-excel {
+  color: white;
+  background: #0f6cbd;
+  padding: 0.35em;
+  border-radius: 0.5em;
+  text-decoration: none;
+}
+
+.select-excel {
+  padding: 0.35em;
+  margin-inline-start: 0.5em;
+  border-color: #999;
+  border-radius: 0.5em;
 }
 </style>
