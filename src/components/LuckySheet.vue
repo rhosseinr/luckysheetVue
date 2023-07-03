@@ -413,6 +413,258 @@ export default {
     onTogglePager(page) {
       this.$emit("onTogglePager", page);
     },
+
+    getCellValue(row, column, setting) {
+      return window.luckysheet.getCellValue(row, column, setting);
+    },
+
+    setCellValue(row, column, value, setting) {
+      window.luckysheet.setCellValue(row, column, value, setting);
+    },
+
+    clearCell(row, column, setting) {
+      window.luckysheet.clearCell(row, column, setting);
+    },
+
+    deleteCell(move, row, column, setting) {
+      window.luckysheet.deleteCell(move, row, column, setting);
+    },
+
+    setCellFormat(row, column, attr, value, setting) {
+      window.luckysheet.setCellFormat(row, column, attr, value, setting);
+    },
+
+    find(content, setting) {
+      return window.luckysheet.find(content, setting);
+    },
+
+    replace(content, replaceContent, setting) {
+      return window.luckysheet.replace(content, replaceContent, setting);
+    },
+
+    exitEditMode(setting) {
+      return window.luckysheet.exitEditMode(setting);
+    },
+
+    setHorizontalFrozen(isRange, setting) {
+      return window.luckysheet.setHorizontalFrozen(isRange, setting);
+    },
+
+    setVerticalFrozen(isRange, setting) {
+      return window.luckysheet.setVerticalFrozen(isRange, setting);
+    },
+
+    setBothFrozen(isRange, setting) {
+      return window.luckysheet.setBothFrozen(isRange, setting);
+    },
+
+    cancelFrozen(setting) {
+      return window.luckysheet.cancelFrozen(setting);
+    },
+
+    insertRow(row, setting) {
+      return window.luckysheet.insertRow(row, setting);
+    },
+
+    insertColumn(column, setting) {
+      return window.luckysheet.insertColumn(column, setting);
+    },
+
+    deleteRow(rowStart, rowEnd, setting) {
+      return window.luckysheet.deleteRow(rowStart, rowEnd, setting);
+    },
+
+    hideRow(rowStart, rowEnd, setting) {
+      return window.luckysheet.hideRow(rowStart, rowEnd, setting);
+    },
+
+    showRow(rowStart, rowEnd, setting) {
+      return window.luckysheet.showRow(rowStart, rowEnd, setting);
+    },
+
+    deleteColumn(columnStart, columnEnd, setting) {
+      return window.luckysheet.deleteColumn(columnStart, columnEnd, setting);
+    },
+
+    setRowHeight(rowInfo, setting) {
+      return window.luckysheet.setRowHeight(rowInfo, setting);
+    },
+
+    getRowHeight(rowInfo, setting) {
+      return window.luckysheet.getRowHeight(rowInfo, setting);
+    },
+
+    setColumnWidth(columnInfo, setting) {
+      return window.luckysheet.setColumnWidth(columnInfo, setting);
+    },
+
+    getColumnWidth(columnInfo, setting) {
+      return window.luckysheet.getColumnWidth(columnInfo, setting);
+    },
+
+    getDefaultRowHeight(setting) {
+      return window.luckysheet.getDefaultRowHeight(setting);
+    },
+
+    getDefaultColWidth(setting) {
+      return window.luckysheet.getDefaultColWidth(setting);
+    },
+
+    getRange() {
+      return window.luckysheet.getRange();
+    },
+
+    getRangeWithFlatten() {
+      return window.luckysheet.getRangeWithFlatten();
+    },
+
+    getRangeValuesWithFlatte() {
+      return window.luckysheet.getRangeValuesWithFlatte();
+    },
+
+    getRangeAxis() {
+      return window.luckysheet.getRangeAxis();
+    },
+
+    getRangeValue(setting) {
+      return window.luckysheet.getRangeValue(setting);
+    },
+
+    getRangeHtml(setting) {
+      return window.luckysheet.getRangeHtml(setting);
+    },
+
+    getRangeJson(title, setting) {
+      return window.luckysheet.getRangeJson(title, setting);
+    },
+
+    getRangeArray(dimensional, setting) {
+      return window.luckysheet.getRangeArray(dimensional, setting);
+    },
+
+    getRangeDiagonal(type, setting) {
+      return window.luckysheet.getRangeDiagonal(type, setting);
+    },
+
+    getRangeBoolean(setting) {
+      return window.luckysheet.getRangeBoolean(setting);
+    },
+
+    setRangeShow(range, setting) {
+      return window.luckysheet.setRangeShow(range, setting);
+    },
+
+    setRangeValue(data, setting) {
+      return window.luckysheet.setRangeValue(data, setting);
+    },
+
+    setRangeFormat(attr, value, setting) {
+      return window.luckysheet.setRangeFormat(attr, value, setting);
+    },
+
+    setRangeFilter(type, setting) {
+      return window.luckysheet.setRangeFilter(type, setting);
+    },
+
+    setRangeMerge(type, setting) {
+      return window.luckysheet.setRangeMerge(type, setting);
+    },
+
+    cancelRangeMerge(setting) {
+      return window.luckysheet.cancelRangeMerge(setting);
+    },
+
+    setRangeSort(type, setting) {
+      return window.luckysheet.setRangeSort(type, setting);
+    },
+
+    setRangeSortMulti(title, sort, setting) {
+      return window.luckysheet.setRangeSortMulti(title, sort, setting);
+    },
+
+    setRangeConditionalFormatDefault(conditionName, conditionValue, setting) {
+      return window.luckysheet.setRangeConditionalFormatDefault(
+        conditionName,
+        conditionValue,
+        setting
+      );
+    },
+
+    setRangeConditionalFormat(type, setting) {
+      return window.luckysheet.setRangeConditionalFormat(type, setting);
+    },
+
+    deleteRangeConditionalFormat(itemIndex, setting) {
+      return window.luckysheet.deleteRangeConditionalFormat(itemIndex, setting);
+    },
+
+    clearRange(setting) {
+      return window.luckysheet.clearRange(setting);
+    },
+
+    deleteRange(move, setting) {
+      return window.luckysheet.deleteRange(move, setting);
+    },
+
+    insertRange(move, setting) {
+      return window.luckysheet.insertRange(move, setting);
+    },
+
+    matrixOperation(type, setting) {
+      return window.luckysheet.matrixOperation(type, setting);
+    },
+
+    matrixCalculation(type, number, setting) {
+      return window.luckysheet.matrixCalculation(type, number, setting);
+    },
+
+    getAllSheets() {
+      return window.luckysheet.getAllSheets();
+    },
+
+    getLuckysheetfile() {
+      return window.luckysheet.getLuckysheetfile();
+    },
+
+    setSheetAdd(setting) {
+      return window.luckysheet.setSheetAdd(setting);
+    },
+
+    setSheetMove(type, setting) {
+      return window.luckysheet.setSheetMove(type, setting);
+    },
+
+    showGridLines(setting) {
+      return window.luckysheet.showGridLines(setting);
+    },
+
+    hideGridLines(setting) {
+      return window.luckysheet.hideGridLines(setting);
+    },
+
+    setWorkbookName(name, setting) {
+      return window.luckysheet.setWorkbookName(name, setting);
+    },
+
+    getWorkbookName(name, setting) {
+      return window.luckysheet.getWorkbookName(name, setting);
+    },
+
+    refreshFormula(setting) {
+      return window.luckysheet.refreshFormula(setting);
+    },
+
+    refreshMenuButtonFocus(data, r, c, success) {
+      return window.luckysheet.refreshMenuButtonFocus(data, r, c, success);
+    },
+
+    transToCellData(data, setting) {
+      return window.luckysheet.transToCellData(data, setting);
+    },
+
+    toJson() {
+      return window.luckysheet.toJson();
+    },
   },
 };
 </script>
