@@ -18,7 +18,7 @@ export default defineConfig({
         replacement: path.resolve(__dirname, "src"),
       },
     ],
-    extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json", ".vue"],
+    extensions: [ ".js", ".ts", ".jsx", ".tsx", ".json", ".vue"],
   },
   plugins: [
     libInjectCss(),
@@ -37,8 +37,8 @@ export default defineConfig({
     minify: true,
     lib: {
       entry: path.resolve(__dirname, "src/index.js"),
-      name: "lucky-sheet-vue",
-      fileName: "lucky-sheet-vue",
+      name: "luckysheetvue",
+      fileName: "luckysheetvue",
       formats: ["es", "umd"],
     },
     rollupOptions: {

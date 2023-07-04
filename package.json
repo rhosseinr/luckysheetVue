@@ -1,18 +1,19 @@
 {
   "name": "luckysheetvue",
-  "version": "1.2.0",
+  "version": "1.2.2",
   "author": "rhosseinr",
   "license": "GNU",
   "description": "vue 2 wrapper for luckySheet",
+  "type": "module",
   "files": [
     "dist"
   ],
-  "main": "./dist/lucky-sheet-vue.umd.js",
-  "module": "./dist/lucky-sheet-vue.es.js",
+  "main": "./dist/luckysheetvue.umd.js",
+  "module": "./dist/luckysheetvue.js",
   "exports": {
     ".": {
-      "import": "./dist/lucky-sheet-vue.es.js",
-      "require": "./dist/lucky-sheet-vue.umd.js"
+      "import": "./dist/luckysheetvue.js",
+      "require": "./dist/luckysheetvue.umd.js"
     }
   },
   "scripts": {
