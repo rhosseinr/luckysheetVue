@@ -91,7 +91,7 @@ npm i luckysheetvue --save
 
 ## Event
 
-[LuckySheet Event Documents](hhttps://dream-num.github.io/LuckysheetDocs/guide/config.html#hook-function-todo)
+[LuckySheet Event Documents](hhttps://dream-num.github.io/LuckysheetDocs/guide/config.html)
 
 | Event Name                  | Description                                                                     |
 | --------------------------- | ------------------------------------------------------------------------------- |
