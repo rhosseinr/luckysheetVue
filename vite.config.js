@@ -1,7 +1,6 @@
 import path from "path";
 import { defineConfig } from "vite";
 import { createVuePlugin } from "vite-plugin-vue2";
-import envCompatible from "vite-plugin-env-compatible";
 import { viteCommonjs } from "@originjs/vite-plugin-commonjs";
 import { libInjectCss } from "vite-plugin-lib-inject-css";
 import progress from "vite-plugin-progress";
@@ -18,15 +17,9 @@ export default defineConfig({
         replacement: path.resolve(__dirname, "src"),
       },
     ],
-    extensions: [ ".js", ".ts", ".jsx", ".tsx", ".json", ".vue"],
+    extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json", ".vue"],
   },
-  plugins: [
-    libInjectCss(),
-    createVuePlugin(),
-    viteCommonjs(),
-    envCompatible(),
-    progress(),
-  ],
+  plugins: [libInjectCss(), createVuePlugin(), viteCommonjs(), progress()],
   server: {
     strictPort: false,
     https: false,

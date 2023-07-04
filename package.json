@@ -31,7 +31,6 @@
     "eslint": "7.32.0",
     "eslint-plugin-vue": "8.7.1",
     "vite": "^4.3.9",
-    "vite-plugin-env-compatible": "^1.1.1",
     "vite-plugin-lib-inject-css": "^1.1.0",
     "vite-plugin-progress": "^0.0.7",
     "vite-plugin-vue2": "^2.0.3"
