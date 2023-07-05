@@ -133,15 +133,19 @@ export default {
     },
 
     loadLuckySheet() {
-      const pluginJs = this.createScript(
-        "https://cdn.jsdelivr.net/npm/luckysheet@2.1.13/dist/plugins/js/plugin.js"
-      );
-      const luckysheetJs = this.createScript(
-        "https://cdn.jsdelivr.net/npm/luckysheet@2.1.13/dist/luckysheet.umd.js"
-      );
-      luckysheetJs.onload = () => {
+      if (window?.luckysheet) {
         this.luckysheetCreate(true, {});
-      };
+      } else {
+        const pluginJs = this.createScript(
+          "https://cdn.jsdelivr.net/npm/luckysheet@2.1.13/dist/plugins/js/plugin.js"
+        );
+        const luckysheetJs = this.createScript(
+          "https://cdn.jsdelivr.net/npm/luckysheet@2.1.13/dist/luckysheet.umd.js"
+        );
+        luckysheetJs.onload = () => {
+          this.luckysheetCreate(true, {});
+        };
+      }
     },
 
     loadExcel(url, file) {

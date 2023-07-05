@@ -1,6 +1,6 @@
 {
   "name": "luckysheetvue",
-  "version": "1.2.3",
+  "version": "1.3.0",
   "author": "rhosseinr",
   "license": "GNU",
   "description": "vue 2 wrapper for luckySheet",

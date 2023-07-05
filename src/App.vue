@@ -129,6 +129,7 @@ export default {
       :file="selectedFile"
       @updated="updateExcel"
       @resized="resized"
+      show-info-bar
     />
   </div>
 </template>
@@ -197,7 +198,7 @@ body {
 .select-excel {
   padding: 0.35em;
   margin-inline-start: 0.5em;
-  border-color: #999;
+  border-color: var(--base-border-color, #d4d4d4);
   border-radius: 0.5em;
 }
 </style>
