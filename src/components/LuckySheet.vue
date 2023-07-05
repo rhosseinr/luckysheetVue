@@ -133,8 +133,12 @@ export default {
     },
 
     loadLuckySheet() {
-      const pluginJs = this.createScript("js/plugin.js");
-      const luckysheetJs = this.createScript("js/luckysheet.umd.js");
+      const pluginJs = this.createScript(
+        "https://cdn.jsdelivr.net/npm/luckysheet@2.1.13/dist/plugins/js/plugin.js"
+      );
+      const luckysheetJs = this.createScript(
+        "https://cdn.jsdelivr.net/npm/luckysheet@2.1.13/dist/luckysheet.umd.js"
+      );
       luckysheetJs.onload = () => {
         this.luckysheetCreate(true, {});
       };
