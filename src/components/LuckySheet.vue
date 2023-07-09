@@ -1,7 +1,13 @@
 <template>
   <div class="lucky-sheet-wrapper">
-    <div id="luckysheet" />
-    <div v-show="isMaskShow" id="tip">Downloading</div>
+    <iframe
+      class="lucky-sheet-iframe"
+      src="iframe.html"
+      ref="iframe"
+      @load="iframeLoad"
+    >
+    </iframe>
+    <div v-show="isLoading" id="tip">Downloading</div>
   </div>
 </template>
 
@@ -9,10 +15,6 @@
 import { exportExcel } from "../utils/export";
 import { isFunction } from "../utils/is";
 import LuckyExcel from "luckyexcel";
-import "../assets/pluginsCss.css";
-import "../assets/plugins.css";
-import "../assets/luckysheet.css";
-import "../assets/iconfont.css";
 
 export default {
   name: "LuckySheet",
@@ -29,7 +31,8 @@ export default {
 
   data() {
     return {
-      isMaskShow: false,
+      isLoading: false,
+      iframeWin: null,
       hook: {
         updated: this.sheetUpdate,
         cellUpdated: this.cellUpdate,
@@ -86,16 +89,8 @@ export default {
     };
   },
 
-  created() {
-    this.loadLuckySheet();
-  },
-
   mounted() {
-    if (this.url) {
-      this.loadExcel(this.url, null);
-    } else if (this.file) {
-      this.loadExcel(null, this.file);
-    }
+    this.iframeWin = window.frames[0];
   },
 
   computed: {
@@ -124,32 +119,13 @@ export default {
   },
 
   methods: {
-    createScript(src) {
-      const script = document.createElement("script");
-      script.setAttribute("src", src);
-      script.async = false;
-      document.head.appendChild(script);
-      return script;
-    },
-
-    loadLuckySheet() {
-      if (window?.luckysheet) {
-        this.luckysheetCreate(true, {});
-      } else {
-        const pluginJs = this.createScript(
-          "https://cdn.jsdelivr.net/npm/luckysheet@2.1.13/dist/plugins/js/plugin.js"
-        );
-        const luckysheetJs = this.createScript(
-          "https://cdn.jsdelivr.net/npm/luckysheet@2.1.13/dist/luckysheet.umd.js"
-        );
-        luckysheetJs.onload = () => {
-          this.luckysheetCreate(true, {});
-        };
-      }
+    iframeLoad() {
+      this.isLoading = false;
+      this.luckysheetCreate(true, {});
     },
 
     loadExcel(url, file) {
-      this.isMaskShow = true;
+      this.isLoading = true;
 
       if (url) {
         LuckyExcel.transformExcelToLuckyByUrl(
@@ -166,7 +142,7 @@ export default {
         alert(msg);
       }
 
-      this.isMaskShow = false;
+      this.isLoading = false;
     },
 
     processExcel(exportJson, luckysheetfile) {
@@ -181,7 +157,7 @@ export default {
     },
 
     downloadExcel() {
-      exportExcel(luckysheet.getAllSheets(), "excel");
+      exportExcel(this.iframeWin.luckysheet.getAllSheets(), "excel");
     },
 
     createConfig(isNew, exportJson) {
@@ -208,10 +184,11 @@ export default {
       const config = this.createConfig(isNew, exportJson);
 
       if (!isNew) {
-        isFunction(window?.luckysheet?.destroy) && window.luckysheet.destroy();
+        isFunction(this.iframeWin?.luckysheet?.destroy) &&
+          this.iframeWin.luckysheet.destroy();
       }
 
-      window.luckysheet.create(config);
+      this.iframeWin.luckysheet.create(config);
     },
 
     sheetUpdate(operate) {
@@ -423,175 +400,189 @@ export default {
     },
 
     getCellValue(row, column, setting) {
-      return window.luckysheet.getCellValue(row, column, setting);
+      return this.iframeWin.luckysheet.getCellValue(row, column, setting);
     },
 
     setCellValue(row, column, value, setting) {
-      window.luckysheet.setCellValue(row, column, value, setting);
+      this.iframeWin.luckysheet.setCellValue(row, column, value, setting);
     },
 
     clearCell(row, column, setting) {
-      window.luckysheet.clearCell(row, column, setting);
+      this.iframeWin.luckysheet.clearCell(row, column, setting);
     },
 
     deleteCell(move, row, column, setting) {
-      window.luckysheet.deleteCell(move, row, column, setting);
+      this.iframeWin.luckysheet.deleteCell(move, row, column, setting);
     },
 
     setCellFormat(row, column, attr, value, setting) {
-      window.luckysheet.setCellFormat(row, column, attr, value, setting);
+      this.iframeWin.luckysheet.setCellFormat(
+        row,
+        column,
+        attr,
+        value,
+        setting
+      );
     },
 
     find(content, setting) {
-      return window.luckysheet.find(content, setting);
+      return this.iframeWin.luckysheet.find(content, setting);
     },
 
     replace(content, replaceContent, setting) {
-      return window.luckysheet.replace(content, replaceContent, setting);
+      return this.iframeWin.luckysheet.replace(
+        content,
+        replaceContent,
+        setting
+      );
     },
 
     exitEditMode(setting) {
-      return window.luckysheet.exitEditMode(setting);
+      return this.iframeWin.luckysheet.exitEditMode(setting);
     },
 
     setHorizontalFrozen(isRange, setting) {
-      return window.luckysheet.setHorizontalFrozen(isRange, setting);
+      return this.iframeWin.luckysheet.setHorizontalFrozen(isRange, setting);
     },
 
     setVerticalFrozen(isRange, setting) {
-      return window.luckysheet.setVerticalFrozen(isRange, setting);
+      return this.iframeWin.luckysheet.setVerticalFrozen(isRange, setting);
     },
 
     setBothFrozen(isRange, setting) {
-      return window.luckysheet.setBothFrozen(isRange, setting);
+      return this.iframeWin.luckysheet.setBothFrozen(isRange, setting);
     },
 
     cancelFrozen(setting) {
-      return window.luckysheet.cancelFrozen(setting);
+      return this.iframeWin.luckysheet.cancelFrozen(setting);
     },
 
     insertRow(row, setting) {
-      return window.luckysheet.insertRow(row, setting);
+      return this.iframeWin.luckysheet.insertRow(row, setting);
     },
 
     insertColumn(column, setting) {
-      return window.luckysheet.insertColumn(column, setting);
+      return this.iframeWin.luckysheet.insertColumn(column, setting);
     },
 
     deleteRow(rowStart, rowEnd, setting) {
-      return window.luckysheet.deleteRow(rowStart, rowEnd, setting);
+      return this.iframeWin.luckysheet.deleteRow(rowStart, rowEnd, setting);
     },
 
     hideRow(rowStart, rowEnd, setting) {
-      return window.luckysheet.hideRow(rowStart, rowEnd, setting);
+      return this.iframeWin.luckysheet.hideRow(rowStart, rowEnd, setting);
     },
 
     showRow(rowStart, rowEnd, setting) {
-      return window.luckysheet.showRow(rowStart, rowEnd, setting);
+      return this.iframeWin.luckysheet.showRow(rowStart, rowEnd, setting);
     },
 
     deleteColumn(columnStart, columnEnd, setting) {
-      return window.luckysheet.deleteColumn(columnStart, columnEnd, setting);
+      return this.iframeWin.luckysheet.deleteColumn(
+        columnStart,
+        columnEnd,
+        setting
+      );
     },
 
     setRowHeight(rowInfo, setting) {
-      return window.luckysheet.setRowHeight(rowInfo, setting);
+      return this.iframeWin.luckysheet.setRowHeight(rowInfo, setting);
     },
 
     getRowHeight(rowInfo, setting) {
-      return window.luckysheet.getRowHeight(rowInfo, setting);
+      return this.iframeWin.luckysheet.getRowHeight(rowInfo, setting);
     },
 
     setColumnWidth(columnInfo, setting) {
-      return window.luckysheet.setColumnWidth(columnInfo, setting);
+      return this.iframeWin.luckysheet.setColumnWidth(columnInfo, setting);
     },
 
     getColumnWidth(columnInfo, setting) {
-      return window.luckysheet.getColumnWidth(columnInfo, setting);
+      return this.iframeWin.luckysheet.getColumnWidth(columnInfo, setting);
     },
 
     getDefaultRowHeight(setting) {
-      return window.luckysheet.getDefaultRowHeight(setting);
+      return this.iframeWin.luckysheet.getDefaultRowHeight(setting);
     },
 
     getDefaultColWidth(setting) {
-      return window.luckysheet.getDefaultColWidth(setting);
+      return this.iframeWin.luckysheet.getDefaultColWidth(setting);
     },
 
     getRange() {
-      return window.luckysheet.getRange();
+      return this.iframeWin.luckysheet.getRange();
     },
 
     getRangeWithFlatten() {
-      return window.luckysheet.getRangeWithFlatten();
+      return this.iframeWin.luckysheet.getRangeWithFlatten();
     },
 
     getRangeValuesWithFlatte() {
-      return window.luckysheet.getRangeValuesWithFlatte();
+      return this.iframeWin.luckysheet.getRangeValuesWithFlatte();
     },
 
     getRangeAxis() {
-      return window.luckysheet.getRangeAxis();
+      return this.iframeWin.luckysheet.getRangeAxis();
     },
 
     getRangeValue(setting) {
-      return window.luckysheet.getRangeValue(setting);
+      return this.iframeWin.luckysheet.getRangeValue(setting);
     },
 
     getRangeHtml(setting) {
-      return window.luckysheet.getRangeHtml(setting);
+      return this.iframeWin.luckysheet.getRangeHtml(setting);
     },
 
     getRangeJson(title, setting) {
-      return window.luckysheet.getRangeJson(title, setting);
+      return this.iframeWin.luckysheet.getRangeJson(title, setting);
     },
 
     getRangeArray(dimensional, setting) {
-      return window.luckysheet.getRangeArray(dimensional, setting);
+      return this.iframeWin.luckysheet.getRangeArray(dimensional, setting);
     },
 
     getRangeDiagonal(type, setting) {
-      return window.luckysheet.getRangeDiagonal(type, setting);
+      return this.iframeWin.luckysheet.getRangeDiagonal(type, setting);
     },
 
     getRangeBoolean(setting) {
-      return window.luckysheet.getRangeBoolean(setting);
+      return this.iframeWin.luckysheet.getRangeBoolean(setting);
     },
 
     setRangeShow(range, setting) {
-      return window.luckysheet.setRangeShow(range, setting);
+      return this.iframeWin.luckysheet.setRangeShow(range, setting);
     },
 
     setRangeValue(data, setting) {
-      return window.luckysheet.setRangeValue(data, setting);
+      return this.iframeWin.luckysheet.setRangeValue(data, setting);
     },
 
     setRangeFormat(attr, value, setting) {
-      return window.luckysheet.setRangeFormat(attr, value, setting);
+      return this.iframeWin.luckysheet.setRangeFormat(attr, value, setting);
     },
 
     setRangeFilter(type, setting) {
-      return window.luckysheet.setRangeFilter(type, setting);
+      return this.iframeWin.luckysheet.setRangeFilter(type, setting);
     },
 
     setRangeMerge(type, setting) {
-      return window.luckysheet.setRangeMerge(type, setting);
+      return this.iframeWin.luckysheet.setRangeMerge(type, setting);
     },
 
     cancelRangeMerge(setting) {
-      return window.luckysheet.cancelRangeMerge(setting);
+      return this.iframeWin.luckysheet.cancelRangeMerge(setting);
     },
 
     setRangeSort(type, setting) {
-      return window.luckysheet.setRangeSort(type, setting);
+      return this.iframeWin.luckysheet.setRangeSort(type, setting);
     },
 
     setRangeSortMulti(title, sort, setting) {
-      return window.luckysheet.setRangeSortMulti(title, sort, setting);
+      return this.iframeWin.luckysheet.setRangeSortMulti(title, sort, setting);
     },
 
     setRangeConditionalFormatDefault(conditionName, conditionValue, setting) {
-      return window.luckysheet.setRangeConditionalFormatDefault(
+      return this.iframeWin.luckysheet.setRangeConditionalFormatDefault(
         conditionName,
         conditionValue,
         setting
@@ -599,105 +590,100 @@ export default {
     },
 
     setRangeConditionalFormat(type, setting) {
-      return window.luckysheet.setRangeConditionalFormat(type, setting);
+      return this.iframeWin.luckysheet.setRangeConditionalFormat(type, setting);
     },
 
     deleteRangeConditionalFormat(itemIndex, setting) {
-      return window.luckysheet.deleteRangeConditionalFormat(itemIndex, setting);
+      return this.iframeWin.luckysheet.deleteRangeConditionalFormat(
+        itemIndex,
+        setting
+      );
     },
 
     clearRange(setting) {
-      return window.luckysheet.clearRange(setting);
+      return this.iframeWin.luckysheet.clearRange(setting);
     },
 
     deleteRange(move, setting) {
-      return window.luckysheet.deleteRange(move, setting);
+      return this.iframeWin.luckysheet.deleteRange(move, setting);
     },
 
     insertRange(move, setting) {
-      return window.luckysheet.insertRange(move, setting);
+      return this.iframeWin.luckysheet.insertRange(move, setting);
     },
 
     matrixOperation(type, setting) {
-      return window.luckysheet.matrixOperation(type, setting);
+      return this.iframeWin.luckysheet.matrixOperation(type, setting);
     },
 
     matrixCalculation(type, number, setting) {
-      return window.luckysheet.matrixCalculation(type, number, setting);
+      return this.iframeWin.luckysheet.matrixCalculation(type, number, setting);
     },
 
     getAllSheets() {
-      return window.luckysheet.getAllSheets();
+      return this.iframeWin.luckysheet.getAllSheets();
     },
 
     getLuckysheetfile() {
-      return window.luckysheet.getLuckysheetfile();
+      return this.iframeWin.luckysheet.getLuckysheetfile();
     },
 
     setSheetAdd(setting) {
-      return window.luckysheet.setSheetAdd(setting);
+      return this.iframeWin.luckysheet.setSheetAdd(setting);
     },
 
     setSheetMove(type, setting) {
-      return window.luckysheet.setSheetMove(type, setting);
+      return this.iframeWin.luckysheet.setSheetMove(type, setting);
     },
 
     showGridLines(setting) {
-      return window.luckysheet.showGridLines(setting);
+      return this.iframeWin.luckysheet.showGridLines(setting);
     },
 
     hideGridLines(setting) {
-      return window.luckysheet.hideGridLines(setting);
+      return this.iframeWin.luckysheet.hideGridLines(setting);
     },
 
     setWorkbookName(name, setting) {
-      return window.luckysheet.setWorkbookName(name, setting);
+      return this.iframeWin.luckysheet.setWorkbookName(name, setting);
     },
 
     getWorkbookName(name, setting) {
-      return window.luckysheet.getWorkbookName(name, setting);
+      return this.iframeWin.luckysheet.getWorkbookName(name, setting);
     },
 
     refreshFormula(setting) {
-      return window.luckysheet.refreshFormula(setting);
+      return this.iframeWin.luckysheet.refreshFormula(setting);
     },
 
     refreshMenuButtonFocus(data, r, c, success) {
-      return window.luckysheet.refreshMenuButtonFocus(data, r, c, success);
+      return this.iframeWin.luckysheet.refreshMenuButtonFocus(
+        data,
+        r,
+        c,
+        success
+      );
     },
 
     transToCellData(data, setting) {
-      return window.luckysheet.transToCellData(data, setting);
+      return this.iframeWin.luckysheet.transToCellData(data, setting);
     },
 
     toJson() {
-      return window.luckysheet.toJson();
+      return this.iframeWin.luckysheet.toJson();
     },
   },
 };
 </script>
 
 <style scoped>
-.lucky-sheet-wrapper,
-#luckysheet {
+.lucky-sheet-iframe,
+.lucky-sheet-wrapper {
   margin: 0px;
   padding: 0px;
   width: 100%;
   height: 100%;
-}
-
-#tip {
-  position: absolute;
-  z-index: 1000000;
-  left: 0px;
-  top: 0px;
-  bottom: 0px;
-  right: 0px;
-  background: rgba(255, 255, 255, 0.8);
-  text-align: center;
-  font-size: 40px;
-  align-items: center;
-  justify-content: center;
-  display: flex;
+  overflow: hidden;
+  border: 0;
 }
 </style>

@@ -1,0 +1,63 @@
+@font-face {
+  font-family: Vazir;
+  src: url("vazirmatn/fonts/webfonts/Vazirmatn[wght].woff2")
+      format("woff2 supports variations"),
+    url("vazirmatn/fonts/webfonts/Vazirmatn[wght].woff2")
+      format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: fallback;
+}
+
+html,
+body {
+  font-family: Vazir, Helvetica, Arial, sans-serif;
+  padding: 0;
+  margin: 0;
+}
+
+input {
+  font-family: Vazir, Helvetica, Arial, sans-serif;
+}
+
+#luckysheet {
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  height: 100%;
+}
+
+#tip {
+  position: absolute;
+  z-index: 1000000;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+  right: 0px;
+  background: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  font-size: 40px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+input[type="number"],
+input[type="text"],
+select {
+  width: 100%;
+  height: 32px;
+  line-height: 24px;
+  border: 1px solid var(--base-border-color, #d4d4d4);
+  padding: 0.5em 1em;
+  box-sizing: border-box;
+  font-size: 12px;
+  border-radius: 5px;
+  outline: 0;
+}
+
+input[type="number"]:focus,
+input[type="text"]:focus,
+select:focus {
+  border-color: var(--base-primary, #0f6cbd) !important;
+}
