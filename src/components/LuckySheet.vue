@@ -2,8 +2,21 @@
   <div class="lucky-sheet-wrapper">
     <iframe
       class="lucky-sheet-iframe"
-      src="iframe.html"
       ref="iframe"
+      srcdoc="<html>
+                <head>
+                  <script src='https://cdn.jsdelivr.net/npm/luckysheet@2.1.13/dist/plugins/js/plugin.js'></script>
+                  <script src='https://cdn.jsdelivr.net/npm/luckysheet@2.1.13/dist/luckysheet.umd.js'></script>
+                  <link rel='stylesheet' href='assets/pluginsCss.css' />
+                  <link rel='stylesheet' href='assets/plugins.css' />
+                  <link rel='stylesheet' href='assets/luckysheet.css' />
+                  <link rel='stylesheet' href='assets/iconfont.css' />
+                  <link rel='stylesheet' href='assets/style.css' />
+                </head>
+                <body>
+                  <div id='luckysheet'></div>
+                </body>
+              </html>"
       @load="iframeLoad"
     >
     </iframe>
@@ -119,7 +132,7 @@ export default {
   },
 
   methods: {
-    iframeLoad() {
+    iframeLoad(event) {
       this.isLoading = false;
       this.luckysheetCreate(true, {});
     },
