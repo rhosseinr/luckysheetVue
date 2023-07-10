@@ -19,7 +19,14 @@ export default defineConfig({
     ],
     extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json", ".vue"],
   },
-  plugins: [libInjectCss(), createVuePlugin(), viteCommonjs(), progress()],
+  plugins: [
+    libInjectCss(),
+    createVuePlugin(),
+    viteCommonjs({
+      exclude: ["lucky-sheet-pkg"],
+    }),
+    progress(),
+  ],
   server: {
     strictPort: false,
     https: false,

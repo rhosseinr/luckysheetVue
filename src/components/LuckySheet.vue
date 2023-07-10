@@ -5,15 +5,40 @@
       ref="iframe"
       srcdoc="<html>
                 <head>
-                  <script src='https://cdn.jsdelivr.net/npm/luckysheet@2.1.13/dist/plugins/js/plugin.js'></script>
-                  <script src='https://cdn.jsdelivr.net/npm/luckysheet@2.1.13/dist/luckysheet.umd.js'></script>
-                  <link rel='stylesheet' href='assets/pluginsCss.css' />
-                  <link rel='stylesheet' href='assets/plugins.css' />
-                  <link rel='stylesheet' href='assets/luckysheet.css' />
-                  <link rel='stylesheet' href='assets/iconfont.css' />
-                  <link rel='stylesheet' href='assets/style.css' />
+                  <script src='../../node_modules/lucky-sheet-pkg/dist/plugins/js/plugin.js'></script>
+                  <script src='../../node_modules/lucky-sheet-pkg/dist/luckysheet.umd.js'></script>
+                  <link rel='stylesheet' href='../../node_modules/lucky-sheet-pkg/dist/plugins/css/pluginsCss.css' />
+                  <link rel='stylesheet' href='../../node_modules/lucky-sheet-pkg/dist/plugins/plugins.css' />
+                  <link rel='stylesheet' href='../../node_modules/lucky-sheet-pkg/dist/css/luckysheet.css' />
+                  <link rel='stylesheet' href='../../node_modules/lucky-sheet-pkg/dist/assets/iconfont/iconfont.css' />
                 </head>
                 <body>
+                  <style>
+                  html,
+body,
+#luckysheet {
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  height: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#tip {
+  position: absolute;
+  z-index: 1000000;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+  right: 0px;
+  background: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  font-size: 40px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+                  </style>
                   <div id='luckysheet'></div>
                 </body>
               </html>"
