@@ -209,24 +209,30 @@ export default {
         defaultFontSize: this.defaultFontSize,
         hook: this.computedHook,
       };
-
       if (!isNew) {
         config.data = exportJson.sheets;
         config.userInfo = exportJson.info.name.creator;
       }
-
       return config;
     },
 
     luckysheetCreate(isNew, exportJson) {
-      const config = this.createConfig(isNew, exportJson);
+      if (this.iframeWin?.luckysheet) {
+        console.log("lucky-sheet ready");
+        const config = this.createConfig(isNew, exportJson);
+        if (!isNew) {
+          isFunction(this.iframeWin?.luckysheet?.destroy) &&
+            this.iframeWin.luckysheet.destroy();
+        }
 
-      if (!isNew) {
-        isFunction(this.iframeWin?.luckysheet?.destroy) &&
-          this.iframeWin.luckysheet.destroy();
+        this.iframeWin.luckysheet.create(config);
+      } else {
+        console.log("lucky-sheet not ready");
+        const self = this;
+        setTimeout(function () {
+          self.luckysheetCreate(true, {});
+        }, 1000);
       }
-
-      this.iframeWin.luckysheet.create(config);
     },
 
     sheetUpdate(operate) {
