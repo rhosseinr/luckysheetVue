@@ -15,31 +15,44 @@
                 <body>
                   <style>
                   html,
-body,
-#luckysheet {
-  margin: 0px;
-  padding: 0px;
-  width: 100%;
-  height: 100%;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
+                  body,
+                  #luckysheet {
+                    margin: 0px;
+                    padding: 0px;
+                    width: 100%;
+                    height: 100%;
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                  }
 
-#tip {
-  position: absolute;
-  z-index: 1000000;
-  left: 0px;
-  top: 0px;
-  bottom: 0px;
-  right: 0px;
-  background: rgba(255, 255, 255, 0.8);
-  text-align: center;
-  font-size: 40px;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-}
+                  #tip {
+                    position: absolute;
+                    z-index: 1000000;
+                    left: 0px;
+                    top: 0px;
+                    bottom: 0px;
+                    right: 0px;
+                    background: rgba(255, 255, 255, 0.8);
+                    text-align: center;
+                    font-size: 40px;
+                    align-items: center;
+                    justify-content: center;
+                    display: flex;
+                  }
                   </style>
                   <div id='luckysheet'></div>
+                  <script type='text/javascript'>
+                    window.doSomething = function(parentData) {
+                      console.info(parentData);
+                      if(parentData.type=='create'){
+                        if(Object.prototype.toString.call(window.luckysheet?.destroy).slice(8, -1)=='Function'){
+                          window.luckysheet.destroy();
+                          window.luckysheet.create(parentData.config);
+                        }else{
+                          luckysheet.create(parentData.config);
+                        }
+                      }
+                    }
+                </script>
                 </body>
               </html>"
       @load="iframeLoad"
@@ -157,7 +170,7 @@ export default {
   },
 
   methods: {
-    iframeLoad(event) {
+    iframeLoad() {
       this.isLoading = false;
       this.luckysheetCreate(true, {});
     },
@@ -217,22 +230,8 @@ export default {
     },
 
     luckysheetCreate(isNew, exportJson) {
-      if (this.iframeWin?.luckysheet) {
-        console.log("lucky-sheet ready");
-        const config = this.createConfig(isNew, exportJson);
-        if (!isNew) {
-          isFunction(this.iframeWin?.luckysheet?.destroy) &&
-            this.iframeWin.luckysheet.destroy();
-        }
-
-        this.iframeWin.luckysheet.create(config);
-      } else {
-        console.log("lucky-sheet not ready");
-        const self = this;
-        setTimeout(function () {
-          self.luckysheetCreate(true, {});
-        }, 1000);
-      }
+      const config = this.createConfig(isNew, exportJson);
+      this.iframeWin.doSomething({ type: "create", config: config });
     },
 
     sheetUpdate(operate) {
