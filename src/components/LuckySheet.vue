@@ -5,12 +5,12 @@
       ref="iframe"
       srcdoc="<html>
                 <head>
-                  <script src='../../node_modules/lucky-sheet-pkg/dist/plugins/js/plugin.js'></script>
-                  <script src='../../node_modules/lucky-sheet-pkg/dist/luckysheet.umd.js'></script>
-                  <link rel='stylesheet' href='../../node_modules/lucky-sheet-pkg/dist/plugins/css/pluginsCss.css' />
-                  <link rel='stylesheet' href='../../node_modules/lucky-sheet-pkg/dist/plugins/plugins.css' />
-                  <link rel='stylesheet' href='../../node_modules/lucky-sheet-pkg/dist/css/luckysheet.css' />
-                  <link rel='stylesheet' href='../../node_modules/lucky-sheet-pkg/dist/assets/iconfont/iconfont.css' />
+                  <script src='node_modules/lucky-sheet-pkg/dist/plugins/js/plugin.js'></script>
+                  <script src='node_modules/lucky-sheet-pkg/dist/luckysheet.umd.js'></script>
+                  <link rel='stylesheet' href='node_modules/lucky-sheet-pkg/dist/plugins/css/pluginsCss.css' />
+                  <link rel='stylesheet' href='node_modules/lucky-sheet-pkg/dist/plugins/plugins.css' />
+                  <link rel='stylesheet' href='node_modules/lucky-sheet-pkg/dist/css/luckysheet.css' />
+                  <link rel='stylesheet' href='node_modules/lucky-sheet-pkg/dist/assets/iconfont/iconfont.css' />
                 </head>
                 <body>
                   <style>
@@ -140,10 +140,6 @@ export default {
     };
   },
 
-  mounted() {
-    this.iframeWin = window.frames[0];
-  },
-
   computed: {
     registeredEvents() {
       return this._events;
@@ -172,6 +168,7 @@ export default {
   methods: {
     iframeLoad() {
       this.isLoading = false;
+      this.iframeWin = window.frames[0];
       this.luckysheetCreate(true, {});
     },
 
