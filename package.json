@@ -1,6 +1,6 @@
 {
   "name": "luckysheetvue",
-  "version": "1.4.1",
+  "version": "1.5.0",
   "author": "rhosseinr",
   "license": "GNU",
   "description": "vue 2 wrapper for luckySheet",
@@ -24,7 +24,8 @@
   "dependencies": {
     "exceljs": "^4.3.0",
     "file-saver": "^2.0.5",
-    "luckyexcel": "^1.0.1"
+    "luckyexcel": "^1.0.1",
+    "lucky-sheet-pkg": "^1.0.1"
   },
   "devDependencies": {
     "@originjs/vite-plugin-commonjs": "^1.0.1",
