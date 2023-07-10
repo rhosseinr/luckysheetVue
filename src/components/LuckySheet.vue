@@ -169,7 +169,7 @@ export default {
     iframeLoad() {
       this.isLoading = false;
       this.iframeWin = window.frames[0];
-      this.luckysheetCreate(true, {});
+      this.luckysheetInit();
     },
 
     loadExcel(url, file) {
@@ -224,6 +224,16 @@ export default {
         config.userInfo = exportJson.info.name.creator;
       }
       return config;
+    },
+
+    luckysheetInit() {
+      if (this.url != null) {
+        this.loadExcel(this.url, null);
+      } else if (this.file != null) {
+        this.loadExcel(null, this.file);
+      } else {
+        this.luckysheetCreate(true, {});
+      }
     },
 
     luckysheetCreate(isNew, exportJson) {
